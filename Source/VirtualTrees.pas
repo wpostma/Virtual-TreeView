@@ -951,6 +951,10 @@ type
     procedure SetSpacing(Value: Integer);
     procedure SetStyle(Value: TVirtualTreeColumnStyle);
     procedure SetWidth(Value: Integer);
+    function GetWideHint: string;
+    function GetWideText: string;
+    procedure SetWIdeHint(const Value: string);
+    procedure SetWideText(const Value: string);
   protected
     procedure ComputeHeaderLayout(DC: HDC; Client: TRect; UseHeaderGlyph, UseSortGlyph: Boolean;
       var HeaderGlyphPos, SortGlyphPos: TPoint; var SortGlyphSize: TSize; var TextBounds: TRect; DrawFormat: Cardinal;
@@ -983,6 +987,9 @@ type
 
     property Left: Integer read GetLeft;
     property Owner: TVirtualTreeColumns read GetOwner;
+
+    property WideText:string read GetWideText write SetWideText;
+    property WideHint:string read GetWideHint write SetWIdeHint;
   published
     property Alignment: TAlignment read FAlignment write SetAlignment default taLeftJustify;
     property BiDiMode: TBiDiMode read FBiDiMode write SetBiDiMode stored IsBiDiModeStored;
@@ -7054,6 +7061,16 @@ end;
 
 //----------------------------------------------------------------------------------------------------------------------
 
+procedure TVirtualTreeColumn.SetWIdeHint(const Value: string);
+begin
+  Hint := Value;
+end;
+
+procedure TVirtualTreeColumn.SetWideText(const Value: string);
+begin
+  Text := Value;
+end;
+
 procedure TVirtualTreeColumn.SetWidth(Value: Integer);
 
 var
@@ -7463,10 +7480,10 @@ procedure TVirtualTreeColumn.DefineProperties(Filer: TFiler);
 begin
   inherited;
 
-  // Must define a new name for the properties otherwise the VCL will try to load the wide string
-  // without asking us and screws it completely up.
-  Filer.DefineProperty('WideText', ReadText, WriteText, FText <> '');
-  Filer.DefineProperty('WideHint', ReadHint, WriteHint, FHint <> '');
+//  // Must define a new name for the properties otherwise the VCL will try to load the wide string
+//  // without asking us and screws it completely up.
+//  Filer.DefineProperty('WideText', ReadText, WriteText, FText <> '');
+//  Filer.DefineProperty('WideHint', ReadHint, WriteHint, FHint <> '');
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -7647,6 +7664,16 @@ function TVirtualTreeColumn.GetText: string;
 
 begin
   Result := FText;
+end;
+
+function TVirtualTreeColumn.GetWideHint: string;
+begin
+  result := Hint;
+end;
+
+function TVirtualTreeColumn.GetWideText: string;
+begin
+  result := Text;
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
